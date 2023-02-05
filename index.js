@@ -52,6 +52,16 @@ app.post('/api/genres',(req,res) => {
         res.send(genre)
     });
 //----------------------------------------------------------------------------
+//DELETE Request for API Genres
+    app.delete('/api/genres/:id', (req,res) => {
+        const genre = genres.find(g => g.id === parseInt(req.params.id));
+        if(!genre) res.status(404).send("Genre with the given ID was not found");
+
+        const index = genres.indexOf(genre);
+        genres.splice(index,1);
+        res.send(genre);
+    });
+//----------------------------------------------------------------------------
 //GET Request for API HOME
 app.get('/', (req,res) => {
     res.send('Hello Express World!!!');
