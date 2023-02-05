@@ -27,9 +27,11 @@ router.get('/', async(req,res) => {
     res.send(genres);
 });
 
-router.get('/:id', (req,res) => {
-    const genre = genres.find( g => g.id === parseInt(req.params.id));
-    if(!genre) res.status(404).send(NoGenre);
+router.get('/:id', async(req,res) => {
+    const genre = await Genre.findById(req.params.id);
+    if(!genre) res.status(404).send(NoGenre)
+    //const genre = genres.find( g => g.id === parseInt(req.params.id));
+   // if(!genre) res.status(404).send(NoGenre);
     res.send(genre)
 });
 //-------------------------------------------------------------------------
