@@ -25,9 +25,8 @@ app.get('/api/genres/:id', (req,res) => {
 //-------------------------------------------------------------------------
 //POST Request for API Genres
 app.post('/api/genres',(req,res) => {
-//-------------------------------------------------------------------------
-    const schema = Joi.object({name: Joi.string().min(2).max(50).required()});
-    const myResult = schema.validate(req.body);
+    const myResult = validateGenre(req.body);
+    
     if(myResult.error){
         return res.status(400).send(myResult.error.details[0].message)
     }
@@ -44,6 +43,11 @@ app.post('/api/genres',(req,res) => {
 app.get('/', (req,res) => {
     res.send('Hello Express World!!!');
 });
+//--------------------------------------------------------------------------
+ function validateGenre (genre) {
+    const schema = Joi.object({name: Joi.string().min(2).max(50).required()});
+    return schema.validate(genre);
+ }
 //--------------------------------------------------------------------------
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on Port ${port}...`));
