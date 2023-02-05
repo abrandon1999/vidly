@@ -50,14 +50,15 @@ router.post('/',async(req,res) => {
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 //PUT Request for API Genres
-    router.put('/:id', (req, res) => {
-        const genre = genres.find(g => g.id === parseInt(req.params.id));
-        if(!genre) res.status(404).send(NoGenre)
-
+    router.put('/:id', async(req, res) => {
         const {error} = validateGenre(req.body);
         if(error) return res.status(400).send(error.details[0].message);
 
-        genre.name = req.body.name;
+       const genre =  await Genre.findByIdAndUpdate(req.params.id,
+                               {name: req.body.name},
+                               {new: true});
+        
+        if(!genre) res.status(404).send(NoGenre)
         res.send(genre)
     });
 //----------------------------------------------------------------------------
