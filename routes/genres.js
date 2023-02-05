@@ -36,18 +36,15 @@ router.get('/:id', async(req,res) => {
 });
 //-------------------------------------------------------------------------
 //POST Request for API Genres
-router.post('/',(req,res) => {
+router.post('/',async(req,res) => {
     const myResult = validateGenre(req.body);
     
     if(myResult.error){
         return res.status(400).send(myResult.error.details[0].message)
     }
 //-------------------------------------------------------------------------
-    const genre = {
-        id: genres.length + 1,
-        name: req.body.name
-    }
-    genres.push(genre);
+    let genre = new Genre({name: req.body.name})
+    genre = await genre.save();
     res.send(genre);
 });
 //---------------------------------------------------------------------------
