@@ -63,13 +63,11 @@ router.post('/',async(req,res) => {
     });
 //----------------------------------------------------------------------------
 //DELETE Request for API Genres
-    router.delete('/:id', (req,res) => {
-        const genre = genres.find(g => g.id === parseInt(req.params.id));
-        if(!genre) res.status(404).send(NoGenre);
-
-        const index = genres.indexOf(genre);
-        genres.splice(index,1);
+    router.delete('/:id', async(req,res) => {
+        const genre = await Genre.findByIdAndRemove(req.params.id);
+        if(!genre) res.status(404).send("Genre with Given ID was not found")
         res.send(genre);
+
     });
 //----------------------------------------------------------------------------
 //--------------------------------------------------------------------------
