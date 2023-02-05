@@ -11,6 +11,7 @@ const genres = [
     {id: 2, name: "Horror"},
     {id: 3, name: "Romance"}
 ];
+const NoGenre = 'Genre with the Given ID was not Found';
 //-------------------------------------------------------------------------
 //GET Request for API Genres
 app.get('/api/genres', (req,res) => {
@@ -19,7 +20,7 @@ app.get('/api/genres', (req,res) => {
 
 app.get('/api/genres/:id', (req,res) => {
     const genre = genres.find( g => g.id === parseInt(req.params.id));
-    if(!genre) res.status(404).send("Genre with Given ID was not Found");
+    if(!genre) res.status(404).send(NoGenre);
     res.send(genre)
 });
 //-------------------------------------------------------------------------
@@ -43,7 +44,7 @@ app.post('/api/genres',(req,res) => {
 //PUT Request for API Genres
     app.put('/api/genres/:id', (req, res) => {
         const genre = genres.find(g => g.id === parseInt(req.params.id));
-        if(!genre) res.status(404).send("Genre with the given ID was not found")
+        if(!genre) res.status(404).send(NoGenre)
 
         const {error} = validateGenre(req.body);
         if(error) return res.status(400).send(error.details[0].message);
@@ -55,7 +56,7 @@ app.post('/api/genres',(req,res) => {
 //DELETE Request for API Genres
     app.delete('/api/genres/:id', (req,res) => {
         const genre = genres.find(g => g.id === parseInt(req.params.id));
-        if(!genre) res.status(404).send("Genre with the given ID was not found");
+        if(!genre) res.status(404).send(NoGenre);
 
         const index = genres.indexOf(genre);
         genres.splice(index,1);
