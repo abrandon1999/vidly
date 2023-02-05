@@ -1,22 +1,29 @@
 const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
-
-
-
+const mongoose = require('mongoose');
 //MiddleWare
 router.use(express.json());
-//------------------------------------------------------------------------
-//Fake Database
-const genres = [
-    {id: 1, name: "Action"},
-    {id: 2, name: "Horror"},
-    {id: 3, name: "Romance"}
-];
+
+
+//-----------------------------------------------------
+const genreSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 50,
+    },
+});
+//-------------------------------------------------------
+const Genre = new mongoose.model('Genre', genreSchema);
+
+
 const NoGenre = 'Genre with the Given ID was not Found';
 //-------------------------------------------------------------------------
 //GET Request for API Genres
-router.get('/', (req,res) => {
+router.get('/', async(req,res) => {
+    const genres = await Genre.find().sort('name');
     res.send(genres);
 });
 
