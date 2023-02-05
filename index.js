@@ -1,4 +1,5 @@
 const express = require('express');
+const Joi = require('joi');
 const app = express();
 //-----------------------------------------------------------------------
 //MiddleWare
@@ -24,6 +25,13 @@ app.get('/api/genres/:id', (req,res) => {
 //-------------------------------------------------------------------------
 //POST Request for API Genres
 app.post('/api/genres',(req,res) => {
+//-------------------------------------------------------------------------
+    const schema = Joi.object({name: Joi.string().min(2).max(50).required()});
+    const myResult = schema.validate(req.body);
+    if(myResult.error){
+        return res.status(400).send(myResult.error.details[0].message)
+    }
+//-------------------------------------------------------------------------
     const genre = {
         id: genres.length + 1,
         name: req.body.name
@@ -31,6 +39,8 @@ app.post('/api/genres',(req,res) => {
     genres.push(genre);
     res.send(genre);
 });
+//---------------------------------------------------------------------------
+//GET Request for API HOME
 app.get('/', (req,res) => {
     res.send('Hello Express World!!!');
 });
