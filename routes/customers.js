@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 //---------------------------------------------------------
 //Customers Schema
-const Customer = new mongoose.Schema({
+const customerSchema = new mongoose.Schema({
     name: {
         type: String,
         require: true,
@@ -23,4 +23,7 @@ const Customer = new mongoose.Schema({
         maxlength: 50,
     },
 });
-//---------------------------------------------
+//--------------------------------------------------------------
+//Customer.js Model
+const Customer = mongoose.model('Customer', customerSchema);
+//---------------------------------------------------------------
