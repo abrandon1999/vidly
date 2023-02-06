@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 const mongoose = require('mongoose');
-
 //---------------------------------------------------------
 //Customers Schema
 const customerSchema = new mongoose.Schema({
@@ -23,6 +22,7 @@ const customerSchema = new mongoose.Schema({
         maxlength: 50,
     },
 });
+const noCustomer = "Customer with the Given ID was not found";
 //--------------------------------------------------------------
 //Customer.js Model
 const Customer = mongoose.model('Customer', customerSchema);
@@ -31,6 +31,11 @@ const Customer = mongoose.model('Customer', customerSchema);
 router.get('/', async(req,res) => {
     const customer = await Customer.find().sort('name');
     res.send(customer);
+});
+router.get('/:id', async(req,res) => {
+   const customer = await Customer.findById(req.params.id);
+   if(!customer) res.status(404).send(noCustomer);
+   res.send(customer);
 });
 //---------------------------------------------------------------
 module.exports = router;
