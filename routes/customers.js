@@ -27,3 +27,10 @@ const customerSchema = new mongoose.Schema({
 //Customer.js Model
 const Customer = mongoose.model('Customer', customerSchema);
 //---------------------------------------------------------------
+//GET Request for API Customers
+router.get('/', async(req,res) => {
+    const customer = await Customer.find().sort('name');
+    res.send(customer);
+});
+//---------------------------------------------------------------
+module.exports = router;
