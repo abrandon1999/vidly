@@ -11,6 +11,7 @@ app.use('/api/genres', genres);
 app.use('/api/movies', movies);
 app.use('/api/customers',customers);
 app.use('/api/rentals', rentals);
+//app.use(express.json());
 //-----------------------------------------------------------------------
 mongoose.set('strictQuery',false);
 mongoose.connect('mongodb://localhost/vidly')
