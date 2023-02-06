@@ -1,24 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Joi = require('joi');
-const mongoose = require('mongoose');
+const {Genre, validate: validateGenre} = require('../models/genres');
 //MiddleWare
 router.use(express.json());
-
-
-//-----------------------------------------------------
-const genreSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 2,
-        maxlength: 50,
-    },
-});
-//-------------------------------------------------------
-const Genre = new mongoose.model('Genre', genreSchema);
-
-
 const NoGenre = 'Genre with the Given ID was not Found';
 //-------------------------------------------------------------------------
 //GET Request for API Genres
@@ -26,24 +10,20 @@ router.get('/', async(req,res) => {
     const genres = await Genre.find().sort('name');
     res.send(genres);
 });
-
 router.get('/:id', async(req,res) => {
     const genre = await Genre.findById(req.params.id);
     if(!genre) res.status(404).send(NoGenre)
-    //const genre = genres.find( g => g.id === parseInt(req.params.id));
-   // if(!genre) res.status(404).send(NoGenre);
-    res.send(genre)
+    res.send(genre);
 });
 //-------------------------------------------------------------------------
 //POST Request for API Genres
 router.post('/',async(req,res) => {
     const myResult = validateGenre(req.body);
-    
     if(myResult.error){
-        return res.status(400).send(myResult.error.details[0].message)
+        return res.status(400).send(myResult.error.details[0].message);
     }
 //-------------------------------------------------------------------------
-    let genre = new Genre({name: req.body.name})
+    let genre = new Genre({name: req.body.name});
     genre = await genre.save();
     res.send(genre);
 });
@@ -53,13 +33,11 @@ router.post('/',async(req,res) => {
     router.put('/:id', async(req, res) => {
         const {error} = validateGenre(req.body);
         if(error) return res.status(400).send(error.details[0].message);
-
        const genre =  await Genre.findByIdAndUpdate(req.params.id,
                                {name: req.body.name},
                                {new: true});
-        
-        if(!genre) res.status(404).send(NoGenre)
-        res.send(genre)
+        if(!genre) res.status(404).send(NoGenre);
+        res.send(genre);
     });
 //----------------------------------------------------------------------------
 //DELETE Request for API Genres
@@ -67,13 +45,6 @@ router.post('/',async(req,res) => {
         const genre = await Genre.findByIdAndRemove(req.params.id);
         if(!genre) res.status(404).send("Genre with Given ID was not found")
         res.send(genre);
-
     });
 //----------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-function validateGenre (genre) {
-    const schema = Joi.object({name: Joi.string().min(2).max(50).required()});
-    return schema.validate(genre);
- }
- //----------------------------------------------------------------------------
  module.exports = router;

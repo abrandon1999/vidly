@@ -20,11 +20,10 @@ const customerSchema = new mongoose.Schema({
         maxlength: 50,
     },
 });
-
+//--------------------------------------------------------------
 //Customer.js Model
 const Customer = mongoose.model('Customer', customerSchema);
 //---------------------------------------------------------------
-
 function validateCustomer(customer){
     const schema = Joi.object({
         name: Joi.string()
