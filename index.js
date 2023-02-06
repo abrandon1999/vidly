@@ -3,12 +3,14 @@ const app = express();
 const genres = require('./routes/genres');
 const customers = require('./routes/customers');
 const movies = require('./routes/movies');
+const rentals = require('./routes/rentals');
 const mongoose = require('mongoose');
 //----------------------------------------------------------------------
 //Middleware
 app.use('/api/genres', genres);
 app.use('/api/movies', movies);
 app.use('/api/customers',customers);
+app.use('/api/rentals', rentals);
 //-----------------------------------------------------------------------
 mongoose.set('strictQuery',false);
 mongoose.connect('mongodb://localhost/vidly')

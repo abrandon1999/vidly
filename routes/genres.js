@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {Genre, validate: validateGenre} = require('../models/genres');
+const {Genre, validate: validateGenre} = require('../models/genre');
 //MiddleWare
 router.use(express.json());
 const NoGenre = 'Genre with the Given ID was not Found';

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {Customer,validate: validateCustomer} = require("../models/customers");
+const {Customer,validate: validateCustomer} = require("../models/customer");
 //---------------------------------------------------------
 //Middleware
 router.use(express.json());
