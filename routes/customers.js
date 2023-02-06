@@ -3,6 +3,9 @@ const router = express.Router();
 const Joi = require('joi');
 const mongoose = require('mongoose');
 //---------------------------------------------------------
+//Middleware
+router.use(express.json());
+//---------------------------------------------------------
 //Customers Schema
 const customerSchema = new mongoose.Schema({
     name: {
@@ -38,4 +41,31 @@ router.get('/:id', async(req,res) => {
    res.send(customer);
 });
 //---------------------------------------------------------------
+//POST Request for API Customers
+router.post('/', async(req,res) => {
+   const {error} = validateCustomer(req.body);
+   if(error) return res.status(400).send(error.details[0].message)
+   let customer =  new Customer({
+        name: req.body.name,
+        phone: req.body.phone,
+        isGold: req.body.isGold,
+    });
+    customer = await customer.save();
+    res.send(customer)
+});
+//---------------------------------------------------------------
+function validateCustomer(customer){
+    const schema = Joi.object({
+        name: Joi.string()
+                 .min(2)
+                 .max(255)
+                 .required(),
+        phone: Joi.string()
+                  .min(5)
+                  .max(50)
+                  .required(),
+        isGold: Joi.boolean 
+    });
+    return schema.validate(customer)
+}
 module.exports = router;
