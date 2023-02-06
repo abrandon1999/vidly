@@ -68,6 +68,13 @@ router.put('/:id', async(req, res) => {
     res.send(customer)
 });
 //---------------------------------------------------------------
+//DELETE Request for API Customer
+    router.delete('/:id', async(req, res) => {
+        const customer = await Customer.findByIdAndDelete(req.params.id);
+        if(!customer)res.status(404).send(noCustomer);
+        res.send(customer)
+    });
+//---------------------------------------------------------------
 function validateCustomer(customer){
     const schema = Joi.object({
         name: Joi.string()
