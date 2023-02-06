@@ -64,6 +64,15 @@ router.put('/:id', async (req, res) => {
     
     res.send(movie);
   });
+//---------------------------------------------------------------
+//DELETE Request for API Movies
+router.delete('/:id', async (req, res) => {
+    const movie = await Movie.findByIdAndRemove(req.params.id);
+  
+    if (!movie) return res.status(404).send('The movie with the given ID was not found.');
+  
+    res.send(movie);
+  });
 //--------------------------------------------------------
 module.exports = router;
 //---------------------------------------------------------
