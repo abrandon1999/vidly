@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const router = express.Router();
+const asyncMiddleware = require('../middleware/async');
 const {Customer,validate: validateCustomer} = require("../models/customer");
 //---------------------------------------------------------
 //Middleware
@@ -9,18 +10,18 @@ router.use(express.json());
 const noCustomer = "Customer with the Given ID was not found";
 //--------------------------------------------------------------
 //GET Request for API Customers
-router.get('/', async(req,res) => {
+router.get('/', asyncMiddleware(async(req,res) => {
     const customer = await Customer.find().sort('name');
     res.send(customer);
-});
-router.get('/:id', async(req,res) => {
+}));
+router.get('/:id', asyncMiddleware(async(req,res) => {
    const customer = await Customer.findById(req.params.id);
    if(!customer) res.status(404).send(noCustomer);
    res.send(customer);
-});
+}));
 //---------------------------------------------------------------
 //POST Request for API Customers
-router.post('/',auth ,async(req,res) => {
+router.post('/',auth ,asyncMiddleware(async(req,res) => {
    const {error} = validateCustomer(req.body);
    if(error) return res.status(400).send(error.details[0].message)
    let customer =  new Customer({
@@ -30,10 +31,10 @@ router.post('/',auth ,async(req,res) => {
     });
     customer = await customer.save();
     res.send(customer)
-});
+}));
 //---------------------------------------------------------------
 //PUT Request for API Customer
-router.put('/:id',auth, async(req, res) => {
+router.put('/:id',auth, asyncMiddleware(async(req, res) => {
     const {error} = validateCustomer(req.body);
     if(error) return res.status(400).send(error.details[0].message);
     const customer = await Customer.findByIdAndUpdate(req.params.id,
@@ -44,13 +45,13 @@ router.put('/:id',auth, async(req, res) => {
                                    },{new: true});
     if(!customer) res.status(404).send(noCustomer);
     res.send(customer)
-});
+}));
 //---------------------------------------------------------------
 //DELETE Request for API Customer
-    router.delete('/:id',auth, async(req, res) => {
+    router.delete('/:id',auth, asyncMiddleware(async(req, res) => {
         const customer = await Customer.findByIdAndDelete(req.params.id);
         if(!customer)res.status(404).send(noCustomer);
         res.send(customer)
-    });
+    }));
 //---------------------------------------------------------------
 module.exports = router;

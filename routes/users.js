@@ -8,13 +8,14 @@ const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const config = require('config');//<<--------------
 const jwt = require('jsonwebtoken');//<<------------
+const asyncMiddleware = require('../middleware/async');
 //--------------------------------------------------------------------
 
-router.get('/me', auth, async(req,res) => {
+router.get('/me', auth, asyncMiddleware(async(req,res) => {
     const user = await User.findById(req.user._id).select("-password");
     res.send(user)
-});
-router.post('/', async (req, res) => {
+}));
+router.post('/', asyncMiddleware(async(req, res) => {
     const {error} = validate(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -26,5 +27,5 @@ router.post('/', async (req, res) => {
     await user.save();
     const token = user.generateAuthToken();
     res.header('x-auth-token', token).send(_.pick(user, ['_id','name','email']));
-});
+}));
 module.exports = router;
