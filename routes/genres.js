@@ -8,13 +8,13 @@ router.use(express.json());
 const NoGenre = 'Genre with the Given ID was not Found';
 //-------------------------------------------------------------------------
 //GET Request for API Genres
-router.get('/', async(req,res) => {
+router.get('/', async(req,res,next) => {
     try{
         const genres = await Genre.find().sort('name');
         res.send(genres);
     }
     catch(ex){
-        res.status(500).send("Something failed");
+       next(ex);
     }
     
     
