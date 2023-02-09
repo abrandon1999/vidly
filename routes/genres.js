@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const asyncMiddleware = require('../middleware/async');
 const router = express.Router();
 const {Genre, validate: validateGenre} = require('../models/genre');
 //MiddleWare
@@ -8,17 +9,11 @@ router.use(express.json());
 const NoGenre = 'Genre with the Given ID was not Found';
 //-------------------------------------------------------------------------
 //GET Request for API Genres
-router.get('/', async(req,res,next) => {
-    try{
+
+router.get('/', asyncMiddleware(async(req,res,next) => { 
         const genres = await Genre.find().sort('name');
-        res.send(genres);
-    }
-    catch(ex){
-       next(ex);
-    }
-    
-    
-});
+        res.send(genres); 
+}));
 router.get('/:id', async(req,res) => {
     const genre = await Genre.findById(req.params.id);
     if(!genre) res.status(404).send(NoGenre)
