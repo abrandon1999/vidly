@@ -1,4 +1,5 @@
 const express = require('express');
+const auth = require('../middleware/auth');
 const router = express.Router();
 const {Genre, validate: validateGenre} = require('../models/genre');
 //MiddleWare
@@ -17,7 +18,7 @@ router.get('/:id', async(req,res) => {
 });
 //-------------------------------------------------------------------------
 //POST Request for API Genres
-router.post('/',async(req,res) => {
+router.post('/',auth,async(req,res) => {
     const myResult = validateGenre(req.body);
     if(myResult.error){
         return res.status(400).send(myResult.error.details[0].message);
@@ -30,7 +31,7 @@ router.post('/',async(req,res) => {
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 //PUT Request for API Genres
-    router.put('/:id', async(req, res) => {
+    router.put('/:id',auth, async(req, res) => {
         const {error} = validateGenre(req.body);
         if(error) return res.status(400).send(error.details[0].message);
        const genre =  await Genre.findByIdAndUpdate(req.params.id,
@@ -41,7 +42,7 @@ router.post('/',async(req,res) => {
     });
 //----------------------------------------------------------------------------
 //DELETE Request for API Genres
-    router.delete('/:id', async(req,res) => {
+    router.delete('/:id',auth, async(req,res) => {
         const genre = await Genre.findByIdAndRemove(req.params.id);
         if(!genre) res.status(404).send("Genre with Given ID was not found")
         res.send(genre);
