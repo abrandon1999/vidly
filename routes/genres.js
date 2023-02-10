@@ -12,7 +12,6 @@ const NoGenre = 'Genre with the Given ID was not Found';
 //GET Request for API Genres
 
 router.get('/', asyncMiddleware(async(req,res,next) => {
-        throw new Error('Could not get the genre'); 
         const genres = await Genre.find().sort('name');
         res.send(genres); 
 }));
