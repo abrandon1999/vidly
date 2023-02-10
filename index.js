@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
-const mongoose = require('mongoose');
+
 const config = require('config');
 require('./startup/routes')(app);
+require('./startup/db')();
 //----------------------------------------------------------------------
 if(!config.get('jwtPrivateKey')){
     console.error('FATAL ERROR: jwtPrivateKey is not defined...');
@@ -10,10 +11,10 @@ if(!config.get('jwtPrivateKey')){
 }
 //---------------------------------------------------------------
 //-----------------------------------------------------------------------
-mongoose.set('strictQuery',false);
-mongoose.connect('mongodb://localhost/vidly')
-        .then(() => console.log("Successfully, Connected to MongoDB..."))
-        .catch(err => console.log("Sorry, Could not connect to MongoDB...",err))
+
+
+
+
 //-----------------------------------------------------------------------
 //GET Request for API HOME
 app.get('/', (req,res) => {
