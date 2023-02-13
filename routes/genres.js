@@ -13,7 +13,7 @@ const NoGenre = 'Genre with the Given ID was not Found';
 
 router.get('/', asyncMiddleware(async(req,res,next) => {
 
-    console.log(process.env.NODE_ENV)
+    //console.log(process.env.NODE_ENV)
         const genres = await Genre.find().sort('name');
         res.send(genres); 
 }));
