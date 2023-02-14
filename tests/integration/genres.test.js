@@ -60,6 +60,16 @@ describe('/api/genres', () => {
                         .send({name: name});
             expect(res.status).toBe(400);
         });
-        
+        it('Should save the genre of it it valid', async() => {
+            const token = new User().generateAuthToken();
+            
+            const res = await request(server)
+                        .post('/api/genres')
+                        .set('x-auth-token', token)
+                        .send({name: 'genre1'});
+
+            const genre = await Genre.find({name: 'genre1'})
+            expect(genre).not.toBeNull();
+        });
     });
 });
