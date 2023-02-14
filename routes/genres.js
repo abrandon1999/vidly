@@ -2,9 +2,11 @@ const express = require('express');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const asyncMiddleware = require('../middleware/async');
+const validateObjectId = require('../middleware/validateObjectId');
 const router = express.Router();
 
 const {Genre, validate: validateGenre} = require('../models/genre');
+const { default: mongoose } = require('mongoose');
 //MiddleWare
 router.use(express.json());
 const NoGenre = 'Genre with the Given ID was not Found';
@@ -12,12 +14,11 @@ const NoGenre = 'Genre with the Given ID was not Found';
 //GET Request for API Genres
 
 router.get('/', asyncMiddleware(async(req,res,next) => {
-
     //console.log(process.env.NODE_ENV)
         const genres = await Genre.find().sort('name');
         res.send(genres); 
 }));
-router.get('/:id', asyncMiddleware(async(req,res) => {
+router.get('/:id', validateObjectId,asyncMiddleware(async(req,res) => {
     const genre = await Genre.findById(req.params.id);
     if(!genre) res.status(404).send(NoGenre)
     res.send(genre);

@@ -9,6 +9,7 @@ const logger = winston.createLogger({
 });
 
 module.exports = function (err,req,res,next){
+    console.log(err)
     logger.log({
         level: 'error',
         message: err.message
