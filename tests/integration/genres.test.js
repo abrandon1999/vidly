@@ -1,13 +1,15 @@
 const request = require('supertest');
 const {Genre} = require('../../models/genre');
 const {User} = require('../../models/user');
-let server;
 
 describe('/api/genres', () => {
-    beforeEach(() => server = require('../../index'));
+    let server;
+    beforeEach(() => {
+        server = require('../../index')
+    });
     afterEach(async() => {
+        await server.close();//
         await Genre.remove({});
-        server.close();
     });
     describe('GET', () => {
         it('Should return all genres', async() => {
