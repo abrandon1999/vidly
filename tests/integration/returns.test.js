@@ -36,13 +36,20 @@ describe('/api/returns', () => {
        .send({customerId,movieId});
         expect(res.status).toBe(401);
     }); 
-    //it('should return 400 if CustomerId is not provided', async() => {
-    //    const token = new User().generateAuthToken();
-    //    //TODO: This Test is wrong should return 400 but its returning 404
-    //     const res = await request(server)
-    //     .post('/api/returns')
-    //     .set('x-auth-token', token)
-    //     .send({movieId});
-    //      expect(res.status).toBe(400);
-    //  }); 
+    it('should return 400 if customerId is not provided', async() => {
+        const token = new User().generateAuthToken();
+         const res = await request(server)
+         .post('/api/returns')
+         .set('x-auth-token', token)
+         .send({movieId});
+          expect(res.status).toBe(400);
+      }); 
+      it('should return 400 if movieId is not provided', async() => {
+        const token = new User().generateAuthToken();
+         const res = await request(server)
+         .post('/api/returns')
+         .set('x-auth-token', token)
+         .send({customerId});
+          expect(res.status).toBe(400);
+      }); 
 });//
