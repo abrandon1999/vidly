@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
+
 
 router.post('/', (req,res,next) => {
-    console.log("AAAAAAAaaaa")
+    console.log("You should see this message")
     res.status(401).send('Unauthorized');
 });
 
