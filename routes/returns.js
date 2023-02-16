@@ -1,15 +1,17 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const router = express.Router();
+const validate = require('../middleware/validate');
 const {Rental} = require('../models/rental');
 const {Movie} = require('../models/movie');
 const moment = require('moment');
+const Joi = require('joi');
 
 router.use(express.json());
-router.post('/', auth, async(req,res) => {
-   if(!req.header('x-auth-token')) return res.status(401).send('Unauthorized...');
-   if(!req.body.customerId) return res.status(400).send("customerId Not Provided...");
-   if(!req.body.movieId) return res.status(400).send("movieId Not Provided...");
+
+
+router.post('/', [auth,validate(validateReturn)], async(req,res) => {
+//----------------------------------------------------------------------
 //-------------------------------------------------------------------------------
   const rental = await Rental.findOne({
       'customer._id': req.body.customerId,
@@ -30,5 +32,15 @@ router.post('/', auth, async(req,res) => {
   return res.status(200).send(rental);
  // return res.status(401)
 });
+function validateReturn (req) {
+    const schema = Joi.object({
+        customerId: Joi.string().required(),
+        movieId: Joi.string().required()
+    });
+    return schema.validate(req);
+ }
+
+
+
 
 module.exports = router;
