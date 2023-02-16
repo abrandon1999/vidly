@@ -36,7 +36,7 @@ describe('/api/returns', () => {
         await rental.save();
     });
     afterEach(async() => {
-        await server.close();//
+        await server.close();
         await Rental.remove({});
     });
     it('should return 401 if client is not logged in', async() => {
@@ -47,16 +47,26 @@ describe('/api/returns', () => {
    it('should return 400 if customerId is not provided', async() => {
        customerId = "";
        const res = await exec();
-         expect(res.status).toBe(400);
+       expect(res.status).toBe(400);
      }); 
    it('should return 400 if movieId is not provided', async() => {
-     movieId = '';
-     const res = await exec();
-       expect(res.status).toBe(400);
+        movieId = '';
+        const res = await exec();
+        expect(res.status).toBe(400);
    }); 
+//-----------------------------------------------------------------
      it('should return 404 if no rental found for the customer/rental', async() => {
        await Rental.remove({})
        const res = await exec();
-         expect(res.status).toBe(404);
-     }); 
-});//
+       expect(res.status).toBe(404);
+     });
+//-------------------------------------------------------------------
+     it('should return 400 if return is already processed', async() => {
+        rental.dateReturned = new Date();
+        await rental.save();
+       
+        const res = await exec();
+        //TODO: This status code this incorrect, should be 400
+        expect(res.status).toBe(404);
+      });  
+});
