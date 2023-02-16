@@ -28,7 +28,7 @@ describe('/api/returns', () => {
                 phone: '12345'
             },
             movie: {
-                id: movieId,
+                _id: movieId,
                 title: '12345',
                 dailyRentalRate: 2,
             },
@@ -54,19 +54,16 @@ describe('/api/returns', () => {
         const res = await exec();
         expect(res.status).toBe(400);
    }); 
-//-----------------------------------------------------------------
+
      it('should return 404 if no rental found for the customer/rental', async() => {
        await Rental.remove({})
        const res = await exec();
        expect(res.status).toBe(404);
      });
-//-------------------------------------------------------------------
      it('should return 400 if return is already processed', async() => {
         rental.dateReturned = new Date();
         await rental.save();
-       
         const res = await exec();
-        //TODO: This status code this incorrect, should be 400
-        expect(res.status).toBe(404);
+        expect(res.status).toBe(400);
       });  
 });
