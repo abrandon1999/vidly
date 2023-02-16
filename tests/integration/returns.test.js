@@ -2,6 +2,7 @@ const {Rental} = require('../../models/rental');
 const {User} = require('../../models/user');
 const mongoose = require('mongoose');
 const request = require('supertest');
+const moment = require('moment');
 
 describe('/api/returns', () => {
     let server;
@@ -70,10 +71,23 @@ describe('/api/returns', () => {
         const res = await exec();
         expect(res.status).toBe(200);
       });  
-      it('should set teh returnDate if input is valid', async() => {
+      it('should set the returnDate if input is valid', async() => {
         const res = await exec();
         const rentalInDb = await Rental.findById(rental._id);
         const diff = new Date() - rentalInDb.dateReturned
         expect(diff).toBeLessThan(10 * 1000);
       });  
+      it('should set the rentalFee if input is valid', async() => {
+        rental.dateOut = moment().add(-7, 'days').toDate();
+        await rental.save();
+
+        const res = await exec();
+
+        const rentalInDb = await Rental.findById(rental._id);
+        expect(rentalInDb.rentalFee).toBe(14)
+        
+      });  
 });
+//By default the dateout property is set to the current date
+//we should modify this before calling the exec()
+//npm install moment
