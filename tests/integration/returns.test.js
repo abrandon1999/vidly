@@ -44,14 +44,19 @@ describe('/api/returns', () => {
         const res = await exec();
         expect(res.status).toBe(401);
     }); 
-    it('should return 400 if customerId is not provided', async() => {
-        customerId = "";
-        const res = await exec();
-          expect(res.status).toBe(400);
-      }); 
-      it('should return 400 if movieId is not provided', async() => {
-        movieId = '';
-        const res = await exec();
-          expect(res.status).toBe(400);
-      }); 
+   it('should return 400 if customerId is not provided', async() => {
+       customerId = "";
+       const res = await exec();
+         expect(res.status).toBe(400);
+     }); 
+   it('should return 400 if movieId is not provided', async() => {
+     movieId = '';
+     const res = await exec();
+       expect(res.status).toBe(400);
+   }); 
+     it('should return 404 if no rental found for the customer/rental', async() => {
+       await Rental.remove({})
+       const res = await exec();
+         expect(res.status).toBe(404);
+     }); 
 });//
